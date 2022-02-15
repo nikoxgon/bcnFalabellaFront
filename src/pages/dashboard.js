@@ -1,7 +1,25 @@
 import AppLayout from '@/components/Layouts/AppLayout'
 import Head from 'next/head'
+import Axios from 'axios'
+import React, { useState, useEffect } from 'react'
 
 const Dashboard = () => {
+    const [loading, setLoading] = useState(true)
+    const [name, setName] = useState([])
+    useEffect(() => {
+        const fetchData = async () => {
+            const response = await Axios.get(
+                'http://localhost:8000/api/v1/schedules',
+            )
+
+            if (response.status === 200 && response) {
+                setLoading(false)
+                setName(response.data)
+            }
+        }
+        fetchData()
+    }, [])
+
     return (
         <AppLayout
             header={
@@ -9,11 +27,14 @@ const Dashboard = () => {
                     Dashboard
                 </h2>
             }>
-
             <Head>
                 <title>Laravel - Dashboard</title>
             </Head>
-
+            {name.map(item => {
+                ;<div key={item.id}>
+                    <p>{item.date}</p>
+                </div>
+            })}
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
