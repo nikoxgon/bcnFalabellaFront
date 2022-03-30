@@ -2,14 +2,59 @@ import ApplicationLogo from '@/components/ApplicationLogo'
 import Dropdown from '@/components/Dropdown'
 import Link from 'next/link'
 import NavLink from '@/components/NavLink'
-import ResponsiveNavLink, { ResponsiveNavButton } from '@/components/ResponsiveNavLink'
-import { DropdownButton } from '@/components/DropdownLink'
+import ResponsiveNavLink, {
+    ResponsiveNavButton,
+} from '@/components/ResponsiveNavLink'
+import DropdownLink, { DropdownButton } from '@/components/DropdownLink'
 import { useAuth } from '@/hooks/auth'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 
 const Navigation = ({ user }) => {
     const router = useRouter()
+    const routes = [
+        {
+            name: 'Inicio',
+            url: '/dashboard',
+            type: 'link',
+        },
+        {
+            name: 'Inscripción',
+            url: '/inscripcion',
+            type: 'link',
+        },
+        {
+            name: 'Mantenedores',
+            url: '/mantenedores',
+            type: 'dropdown',
+            children: [
+                {
+                    name: 'Malls',
+                    url: '/malls',
+                },
+                {
+                    name: 'Malls Fechas',
+                    url: '/mallsfechas',
+                },
+                {
+                    name: 'Rutas',
+                    url: '/routes',
+                },
+                {
+                    name: 'Países',
+                    url: '/countries',
+                },
+                {
+                    name: 'Inscripciones',
+                    url: '/inscripciones',
+                },
+                {
+                    name: 'Reservaciones',
+                    url: '/reservaciones',
+                },
+            ],
+        },
+    ]
 
     const { logout } = useAuth()
 
@@ -32,11 +77,61 @@ const Navigation = ({ user }) => {
 
                         {/* Navigation Links */}
                         <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                            <NavLink
-                                href="/dashboard"
-                                active={router.pathname === '/dashboard'}>
-                                Dashboard
-                            </NavLink>
+                            {routes.map(route =>
+                                route.type === 'link' ? (
+                                    <NavLink
+                                        key={route.url}
+                                        href={route.url}
+                                        active={router.pathname === route.url}>
+                                        {route.name}
+                                    </NavLink>
+                                ) : (
+                                    <Dropdown
+                                        align="right"
+                                        width="48"
+                                        className="flex"
+                                        key={route.name}
+                                        trigger={
+                                            <button
+                                                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium leading-5 focus:outline-none transition duration-150 ease-in-out ${
+                                                    router.pathname.includes(
+                                                        route.url,
+                                                    )
+                                                        ? 'border-indigo-400 text-gray-900 focus:border-indigo-700'
+                                                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:text-gray-700 focus:border-gray-300'
+                                                }`}>
+                                                <div>{route.name}</div>
+
+                                                <div className="ml-1">
+                                                    <svg
+                                                        className="fill-current h-4 w-4"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 20 20">
+                                                        <path
+                                                            fillRule="evenodd"
+                                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                            clipRule="evenodd"
+                                                        />
+                                                    </svg>
+                                                </div>
+                                            </button>
+                                        }>
+                                        {/* children */}
+                                        {route.children.map(child => (
+                                            <DropdownLink
+                                                key={child.name}
+                                                href={route.url + child.url}
+                                                active={
+                                                    router.pathname ===
+                                                    route.url + child.url
+                                                }
+                                                className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">
+                                                {child.name}
+                                            </DropdownLink>
+                                        ))}
+                                    </Dropdown>
+                                ),
+                            )}
                         </div>
                     </div>
 
@@ -63,10 +158,9 @@ const Navigation = ({ user }) => {
                                     </div>
                                 </button>
                             }>
-
                             {/* Authentication */}
                             <DropdownButton onClick={logout}>
-                                Logout
+                                Cerrar Sesión
                             </DropdownButton>
                         </Dropdown>
                     </div>
@@ -108,11 +202,30 @@ const Navigation = ({ user }) => {
             {open && (
                 <div className="block sm:hidden">
                     <div className="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink
-                            href="/dashboard"
-                            active={router.pathname === '/dashboard'}>
-                            Dashboard
-                        </ResponsiveNavLink>
+                        {routes.map(route =>
+                            route.type === 'link' ? (
+                                <ResponsiveNavLink
+                                    key={route.name}
+                                    href={route.url}
+                                    active={router.pathname === route.url}>
+                                    {route.name}
+                                </ResponsiveNavLink>
+                            ) : (
+                                <div>
+                                    {route.children.map(child => (
+                                        <ResponsiveNavLink
+                                            key={child.name}
+                                            href={route.url + child.url}
+                                            active={
+                                                router.pathname ===
+                                                route.url + child.url
+                                            }>
+                                            {child.name}
+                                        </ResponsiveNavLink>
+                                    ))}
+                                </div>
+                            ),
+                        )}
                     </div>
 
                     {/* Responsive Settings Options */}

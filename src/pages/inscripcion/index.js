@@ -7,23 +7,16 @@ import GuestLayout from '@/components/Layouts/GuestLayout'
 import Input from '@/components/Input'
 import Label from '@/components/Label'
 import Link from 'next/link'
-import { useAuth } from '@/hooks/auth'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
-const Login = () => {
+const Inscripcion = () => {
     const router = useRouter()
 
-    const { login } = useAuth({
-        middleware: 'guest',
-        redirectIfAuthenticated: '/dashboard',
-    })
-
     const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [errors, setErrors] = useState([])
+    const [condiciones, setCondiciones] = useState([])
     const [status, setStatus] = useState(null)
-    const [isLoading, setIsLoading] = useState(false)
+    const [errors, setErrors] = useState([])
 
     useEffect(() => {
         if (router.query.reset?.length > 0 && errors.length === 0) {
@@ -31,19 +24,20 @@ const Login = () => {
         } else {
             setStatus(null)
         }
-    })
+    }, [])
 
     const submitForm = async event => {
-        setIsLoading(true)
         event.preventDefault()
 
-        login({ email, password, setErrors, setStatus })
-            .then(() => {
-                setIsLoading(false)
-            })
-            .catch(() => {
-                setIsLoading(false)
-            })
+        if (email.length > 0) {
+            if (email.indexOf('@') === -1) {
+                setStatus(true)
+                setErrors([...errors, 'El email no tiene formato correcto'])
+            } else {
+                localStorage.setItem('email', email)
+                router.push('/inscripcion/datospersonales')
+            }
+        }
     }
 
     return (
@@ -63,9 +57,9 @@ const Login = () => {
                 <AuthValidationErrors className="mb-4" errors={errors} />
 
                 <form onSubmit={submitForm}>
-                    {/* Email Address */}
-                    <div>
-                        <Label htmlFor="email">Correo Electrónico</Label>
+                    {/* MAIL */}
+                    <div className="mt-4">
+                        <Label htmlFor="email">Mail</Label>
 
                         <Input
                             id="email"
@@ -74,53 +68,35 @@ const Login = () => {
                             className="block mt-1 w-full"
                             onChange={event => setEmail(event.target.value)}
                             required
-                            autoFocus
                         />
                     </div>
-
-                    {/* Password */}
-                    <div className="mt-4">
-                        <Label htmlFor="password">Contraseña</Label>
-
-                        <Input
-                            id="password"
-                            type="password"
-                            value={password}
-                            className="block mt-1 w-full"
-                            onChange={event => setPassword(event.target.value)}
-                            required
-                            autoComplete="current-password"
-                        />
-                    </div>
-
-                    {/* Remember Me */}
+                    {/* Pase de movilidad */}
                     <div className="block mt-4">
                         <label
-                            htmlFor="remember_me"
+                            htmlFor="pase_movilidad"
                             className="inline-flex items-center">
                             <input
-                                id="remember_me"
+                                id="pase_movilidad"
+                                name="pase_movilidad"
                                 type="checkbox"
-                                name="remember"
+                                required
+                                value={condiciones}
+                                onChange={event =>
+                                    setCondiciones(Boolean(event.target.value))
+                                }
                                 className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                             />
 
                             <span className="ml-2 text-sm text-gray-600">
-                                Recordar contraseña
+                                Acepto que la información ingresada sea
+                                verdadera y corresponda a la persona que realiza
+                                la inscripción.
                             </span>
                         </label>
                     </div>
 
                     <div className="flex items-center justify-end mt-4">
-                        <Link href="/forgot-password">
-                            <a className="underline text-sm text-gray-600 hover:text-gray-900">
-                                Olvidaste tu contraseña?
-                            </a>
-                        </Link>
-
-                        <Button className="ml-3" disabled={isLoading}>
-                            Iniciar sesión
-                        </Button>
+                        <Button className="ml-3">Continuar</Button>
                     </div>
                 </form>
             </AuthCard>
@@ -128,4 +104,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default Inscripcion

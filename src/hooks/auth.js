@@ -19,6 +19,53 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
 
     const csrf = () => axios.get('/sanctum/csrf-cookie')
 
+    const inscripcion = async ({ setErrors, setStatus, ...props }) => {
+        await csrf()
+
+        setErrors([])
+        setStatus(null)
+
+        axios
+            .post('api/v1/inscriptions', props)
+            .then(response => {
+                if (
+                    !response.data.pase_movilidad ||
+                    response.data.grupo_riesgo
+                ) {
+                    router.push('/inscripcion/aviso')
+                } else {
+                    router.push({
+                        pathname: '/inscripcion/reservacion',
+                        query: { id: response.data.id },
+                    })
+                }
+            })
+            .catch(error => {
+                if (error.response.status !== 422) throw error
+
+                setErrors(Object.values(error.response.data.errors).flat())
+            })
+    }
+
+    const reservacion = async ({ setErrors, setStatus, ...props }) => {
+        await csrf()
+
+        setErrors([])
+        setStatus(null)
+
+        axios
+            .post('api/v1/reservations', props)
+            .then(response => {
+                console.log(response)
+                router.push('/inscripcion')
+            })
+            .catch(error => {
+                if (error.response.status !== 422) throw error
+
+                setErrors(Object.values(error.response.data.errors).flat())
+            })
+    }
+
     const register = async ({ setErrors, ...props }) => {
         await csrf()
 
@@ -74,7 +121,9 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
 
         axios
             .post('/reset-password', { token: router.query.token, ...props })
-            .then(response => router.push('/login?reset=' + btoa(response.data.status)))
+            .then(response =>
+                router.push('/login?reset=' + btoa(response.data.status)),
+            )
             .catch(error => {
                 if (error.response.status != 422) throw error
 
@@ -89,7 +138,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
     }
 
     const logout = async () => {
-        if (! error) {
+        if (!error) {
             await axios.post('/logout')
 
             revalidate()
@@ -99,7 +148,8 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
     }
 
     useEffect(() => {
-        if (middleware === 'guest' && redirectIfAuthenticated && user) router.push(redirectIfAuthenticated)
+        if (middleware === 'guest' && redirectIfAuthenticated && user)
+            router.push(redirectIfAuthenticated)
         if (middleware === 'auth' && error) logout()
     }, [user, error])
 
@@ -107,6 +157,8 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
         user,
         register,
         login,
+        inscripcion,
+        reservacion,
         forgotPassword,
         resetPassword,
         resendEmailVerification,
