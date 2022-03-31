@@ -59,7 +59,7 @@ const Inscripcion = () => {
                 <form onSubmit={submitForm}>
                     {/* MAIL */}
                     <div className="mt-4">
-                        <Label htmlFor="email">Mail</Label>
+                        <Label htmlFor="email">Mail corporativo</Label>
 
                         <Input
                             id="email"
