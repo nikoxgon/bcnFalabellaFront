@@ -7,24 +7,23 @@ import Table from 'react-tailwind-table'
 import 'react-tailwind-table/dist/index.css'
 
 import DeleteModal from '@/components/Modals/DeleteModal'
-import AddRoutesModal from '@/components/Modals/AddRoutesModal'
-import EditRoutesModal from '@/components/Modals/EditRoutesModal'
-import { toast } from 'react-toastify'
-import { TableStyle } from '@/styling/table.style'
+import EditModal from '@/components/Modals/EditModal'
+import AddVisitasModal from '@/components/Modals/AddVisitasModal'
 
-const Routes = () => {
-    const [routes, setRoutes] = useState([])
+const Visitas = () => {
+    const [visitas, setVisitas] = useState([])
     const [columns] = useState(getColumns)
 
-    const loadRoutes = async () => {
-        setRoutes([])
-        const response = await axios.get('http://localhost:8000/api/v1/routes')
+    const loadVisitas = async () => {
+        const response = await axios.get(
+            'http://localhost:8000/api/v1/visitors',
+        )
         if (response.status === 200) {
-            setRoutes(response.data)
+            setVisitas(response.data)
         }
 
         if (response.status === 500) {
-            toast(response.data.message)
+            // console.log('Error al cargar los países')
         }
     }
 
@@ -32,22 +31,21 @@ const Routes = () => {
         if (column.field === 'id') {
             return (
                 <>
-                    <EditRoutesModal
-                        url={`http://localhost:8000/api/v1/routes/${row.id}`}
-                        handler={loadRoutes}
-                        data={row}
+                    <EditModal
+                        url={`http://localhost:8000/api/v1/visitors/${row.id}`}
+                        handler={loadVisitas}
                     />
                     <DeleteModal
-                        objectName={'Route'}
-                        handler={loadRoutes}
-                        urlDelete={`http://localhost:8000/api/v1/routes/${row.id}`}
+                        objectName={'Visitas'}
+                        handler={loadVisitas}
+                        urlDelete={`http://localhost:8000/api/v1/visitors/${row.id}`}
                     />
                 </>
             )
         }
 
-        if (column.field === 'name') {
-            return <b>{display_value}</b>
+        if (column.field === 'disabled') {
+            return <b>{display_value === 0 ? 'Activado' : 'Desactivado'}</b>
         }
 
         return display_value
@@ -58,17 +56,12 @@ const Routes = () => {
             {
                 // use_in_display: false,
                 field: 'name', //Object destructure
-                use: 'Nombre Ruta',
+                use: 'Nombre Visita',
             },
             {
                 // use_in_display: false,
-                field: 'begin', //Object destructure
-                use: 'Fecha Inicio',
-            },
-            {
-                // use_in_display: false,
-                field: 'end', //Object destructure
-                use: 'Fecha Fin',
+                field: 'disabled', //Object destructure
+                use: 'Activado/Desactivado',
             },
             {
                 field: 'id',
@@ -79,7 +72,7 @@ const Routes = () => {
     }
 
     useEffect(() => {
-        loadRoutes()
+        loadVisitas()
         // componentWillUnmount
         return () => {}
     }, [])
@@ -88,27 +81,28 @@ const Routes = () => {
         <AppLayout
             header={
                 <h2 className="font-semibold text-xl text-neutral-300 leading-tight ">
-                    Mantenedores - Rutas
+                    Mantenedores - Visitas
                 </h2>
             }>
             <Head>
-                <title>Falabella - Mantenedores - Rutas</title>
+                <title>Falabella - Visitas</title>
             </Head>
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-neutral-800 overflow-hidden shadow-sm sm:rounded-lg">
                         <div>
-                            <AddRoutesModal
-                                handler={loadRoutes}
-                                url={'http://localhost:8000/api/v1/routes'}
+                            <AddVisitasModal
+                                handler={loadVisitas}
+                                url={'http://localhost:8000/api/v1/visitors'}
                             />
                         </div>
-                        <div className="bg-neutral-700">
+                        <div>
                             <Table
                                 columns={columns}
-                                rows={routes}
+                                rows={visitas}
                                 row_render={rowcheck}
-                                styling={TableStyle}
+                                export_text="Exportar"
+                                striped={true}
                             />
                         </div>
                     </div>
@@ -118,4 +112,4 @@ const Routes = () => {
     )
 }
 
-export default Routes
+export default Visitas

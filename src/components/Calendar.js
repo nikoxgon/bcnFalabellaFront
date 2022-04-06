@@ -196,7 +196,7 @@ const EventCalendar = () => {
                 }}
                 onSelectSlot={handleSelect}
                 messages={messages} // Traducciones
-                style={{ height: 500 }}
+                style={{ height: 500, color: '#f5f5f5' }}
                 eventPropGetter={eventStyleGetter}
             />
             {renderModal()}

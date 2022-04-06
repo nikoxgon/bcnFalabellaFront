@@ -7,8 +7,6 @@ export default function EditRoutesModal(props) {
     const [name, setName] = React.useState('')
     const [begin, setBegin] = React.useState('')
     const [end, setEnd] = React.useState('')
-    const [country, setCountry] = React.useState('')
-    const [countries, setCountries] = React.useState([])
     const [errors, setErrors] = React.useState([])
     const [isLoading, setIsLoading] = React.useState(false)
 
@@ -16,7 +14,6 @@ export default function EditRoutesModal(props) {
         setIsLoading(true)
         const data = {
             name: name,
-            country: country,
             begin: begin,
             end: end,
         }
@@ -36,25 +33,10 @@ export default function EditRoutesModal(props) {
         }
     }
 
-    const getCountries = async () => {
-        const response = await axios.get(
-            'http://localhost:8000/api/v1/countries',
-        )
-        if (response.status === 200) {
-            setCountries(response.data)
-        }
-
-        if (response.status === 500) {
-            toast(response.data.message)
-        }
-    }
-
     useEffect(() => {
-        getCountries()
         setName(props.data.name)
         setBegin(props.data.begin)
         setEnd(props.data.end)
-        setCountry(props.data.country.id)
     }, [])
 
     return (
@@ -82,22 +64,20 @@ export default function EditRoutesModal(props) {
                     <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
                         <div className="relative w-auto my-6 mx-auto max-w-3xl">
                             {/*content*/}
-                            <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                            <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-neutral-800 text-neutral-200 outline-none focus:outline-none">
                                 {/*header*/}
-                                <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+                                <div className="flex items-start justify-between p-5 rounded-t">
                                     <h3 className="text-1xl font-semibold">
-                                        Editar ruta
+                                        Editar nueva ruta
                                     </h3>
                                     <button
-                                        className="ml-auto bg-red border-0 text-black float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                                        className="text-neutral-200 text-1xl font-semibold border px-2 border-neutral-400 rounded-lg"
                                         onClick={() => setShowModal(false)}>
-                                        <span className="bg-transparent text-black h-6 w-6 text-2xl block outline-none focus:outline-none">
-                                            x
-                                        </span>
+                                        X
                                     </button>
                                 </div>
                                 {/*body*/}
-                                <form className="bg-white rounded px-8 pt-6 pb-8 mb-4">
+                                <form className="bg-neutral-700 rounded px-8 pt-2 pb-8 mb-4">
                                     <div className="mb-4">
                                         {errors.map(error => (
                                             <p
@@ -109,12 +89,12 @@ export default function EditRoutesModal(props) {
                                     </div>
                                     <div className="mb-4">
                                         <label
-                                            className="block text-gray-700 text-sm font-bold mb-2"
+                                            className="block text-neutral-200 text-sm font-bold mb-2"
                                             htmlFor="name">
                                             Nombre
                                         </label>
                                         <input
-                                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                            className="shadow appearance-none border rounded w-full py-2 px-3 bg-neutral-600 text-neutral-200 border-neutral-400 mb-2 leading-tight focus:outline-none focus:shadow-outline"
                                             id="name"
                                             type="text"
                                             placeholder="Nombre ruta"
@@ -125,46 +105,14 @@ export default function EditRoutesModal(props) {
                                             }
                                         />
                                     </div>
-                                    <div className="mb-4">
-                                        <label
-                                            className="block text-gray-700 text-sm font-bold mb-2"
-                                            htmlFor="country">
-                                            País
-                                        </label>
-                                        <select
-                                            className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                            id="mall"
-                                            value={country}
-                                            disabled={
-                                                countries.length > 0
-                                                    ? false
-                                                    : true
-                                            }
-                                            onChange={e =>
-                                                setCountry(e.target.value)
-                                            }>
-                                            <option value="">
-                                                {countries
-                                                    ? 'Seleccione un país'
-                                                    : 'Cargando...'}
-                                            </option>
-                                            {countries.map(item => (
-                                                <option
-                                                    key={item.id}
-                                                    value={item.id}>
-                                                    {item.name}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
                                     <div className="mb-6">
                                         <label
-                                            className="block text-gray-700 text-sm font-bold mb-2"
+                                            className="block text-neutral-200 text-sm font-bold mb-2"
                                             htmlFor="begin">
                                             Fecha Inicial
                                         </label>
                                         <input
-                                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                            className="shadow appearance-none border rounded w-full py-2 px-3 bg-neutral-600 text-neutral-200 border-neutral-400 mb-2 leading-tight focus:outline-none focus:shadow-outline"
                                             id="begin"
                                             type="date"
                                             placeholder="01-01-2022"
@@ -176,14 +124,14 @@ export default function EditRoutesModal(props) {
                                             }
                                         />
                                     </div>
-                                    <div className="mb-6">
+                                    <div>
                                         <label
-                                            className="block text-gray-700 text-sm font-bold mb-2"
+                                            className="block text-neutral-200 text-sm font-bold mb-2"
                                             htmlFor="end">
                                             Fecha Final
                                         </label>
                                         <input
-                                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                                            className="shadow appearance-none border rounded w-full py-2 px-3 bg-neutral-600 text-neutral-200 border-neutral-400 mb-2 leading-tight focus:outline-none focus:shadow-outline"
                                             id="end"
                                             type="date"
                                             placeholder="01-03-2022"
@@ -195,19 +143,19 @@ export default function EditRoutesModal(props) {
                                             }
                                         />
                                     </div>
-                                    <div className="flex items-center justify-between">
-                                        <button
-                                            className="bg-green-500 hover:bg-green-700 text-white w-full font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                                            type="button"
-                                            disabled={isLoading}
-                                            onClick={() => {
-                                                addRoute()
-                                            }}>
-                                            Editar Ruta
-                                        </button>
-                                    </div>
                                 </form>
                                 {/*footer*/}
+                                <div className="flex items-center justify-between mb-4 ml-4 mr-4">
+                                    <button
+                                        className="bg-green-700 hover:bg-green-600 text-green-50 w-full font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline"
+                                        type="submit"
+                                        disabled={isLoading}
+                                        onClick={() => {
+                                            addRoute()
+                                        }}>
+                                        Editar ruta
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>

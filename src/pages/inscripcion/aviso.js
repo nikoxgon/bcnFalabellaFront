@@ -14,11 +14,18 @@ const Inscripcionaviso = () => {
                         </a>
                     </Link>
                 }>
-                <div>
-                    Debido a que se encuentra en población de riesgo o no posee
-                    pase de movilidad. No se puede continuar con el formulario
-                    de inscripción
-                </div>
+                <>
+                    <div>
+                        Debido a que has indicado que no puedes participar, no
+                        continuaras con el formulario de inscripción. Te
+                        agradecemos por tu tiempo. Si tienes dudas al respecto,
+                        puedes contactarme con nosotros al correo{' '}
+                        <a href="mailto:rutacliente@falabella.cl">
+                            {' '}
+                            rutacliente@falabella.cl
+                        </a>
+                    </div>
+                </>
             </AuthCard>
         </GuestLayout>
     )

@@ -88,16 +88,16 @@ const MallsFechas = () => {
     return (
         <AppLayout
             header={
-                <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+                <h2 className="font-semibold text-xl text-neutral-300 leading-tight ">
                     Mantenedores - Malls Fechas
                 </h2>
             }>
             <Head>
-                <title>Falabella - Mantendores - Malls Fechas</title>
+                <title>Falabella - Mantenedores - Malls Fechas</title>
             </Head>
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div className="bg-neutral-800 overflow-hidden shadow-sm sm:rounded-lg">
                         <div>
                             <AddMallfechasModal
                                 handler={loadMalls}

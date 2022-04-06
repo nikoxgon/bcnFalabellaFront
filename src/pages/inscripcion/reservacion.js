@@ -5,6 +5,7 @@ import { useAuth } from '@/hooks/auth'
 import { useEffect, useState } from 'react'
 import axios from '@/lib/axios'
 import 'react-datepicker/dist/react-datepicker.css'
+import Button from '@/components/Button'
 
 const Inscripcionreservacion = () => {
     const router = useRouter()
@@ -254,11 +255,7 @@ const Inscripcionreservacion = () => {
                             </div>
                             <div className="py-3 px-6 border-t border-gray-300 text-gray-600">
                                 <div className="inline-flex rounded-md shadow">
-                                    <button
-                                        type="submit"
-                                        className="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">
-                                        Continuar
-                                    </button>
+                                    <Button type="submit">Finalizar</Button>
                                 </div>
                             </div>
                         </form>

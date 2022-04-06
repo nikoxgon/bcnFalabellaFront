@@ -1,11 +1,9 @@
 import React, { useState } from 'react'
 import axios from '@/lib/axios'
 
-export default function AddRoutesModal(props) {
+export default function AddVisitasModal(props) {
     const [showModal, setShowModal] = useState(false)
     const [name, setName] = useState('')
-    const [begin, setBegin] = useState('')
-    const [end, setEnd] = useState('')
     const [errors, setErrors] = useState([])
     const [loading, setLoading] = useState(false)
 
@@ -13,8 +11,6 @@ export default function AddRoutesModal(props) {
         setLoading(true)
         const data = {
             name: name,
-            begin: begin,
-            end: end,
         }
         const response = await axios.post(props.url, data)
         if (response.status === 201) {
@@ -35,7 +31,7 @@ export default function AddRoutesModal(props) {
                 className="bg-blue-500 hover:bg-blue-700 text-blue-100 py-2 px-4 m-4 rounded-lg"
                 type="button"
                 onClick={() => setShowModal(true)}>
-                Nueva Ruta
+                Nueva visita
             </button>
             {showModal ? (
                 <>
@@ -46,7 +42,7 @@ export default function AddRoutesModal(props) {
                                 {/*header*/}
                                 <div className="flex items-start justify-between p-5 rounded-t">
                                     <h3 className="text-1xl font-semibold">
-                                        Agregar nueva ruta
+                                        Agregar nueva visita
                                     </h3>
                                     <button
                                         className="text-neutral-200 text-1xl font-semibold border px-2 border-neutral-400 rounded-lg"
@@ -75,46 +71,10 @@ export default function AddRoutesModal(props) {
                                             className="shadow appearance-none border rounded w-full py-2 px-3 text-neutral-200 leading-tight focus:outline-none focus:shadow-outline"
                                             id="name"
                                             type="text"
-                                            placeholder="Nombre ruta"
+                                            placeholder="Falabella / Banco Falabella"
                                             required
                                             onChange={e =>
                                                 setName(e.target.value)
-                                            }
-                                        />
-                                    </div>
-                                    <div className="mb-6">
-                                        <label
-                                            className="block text-neutral-200 text-sm font-bold mb-2"
-                                            htmlFor="begin">
-                                            Fecha Inicial
-                                        </label>
-                                        <input
-                                            className="shadow appearance-none border rounded w-full py-2 px-3 text-neutral-200 leading-tight focus:outline-none focus:shadow-outline"
-                                            id="begin"
-                                            type="date"
-                                            placeholder="01-01-2022"
-                                            required
-                                            max={end}
-                                            onChange={e =>
-                                                setBegin(e.target.value)
-                                            }
-                                        />
-                                    </div>
-                                    <div>
-                                        <label
-                                            className="block text-neutral-200 text-sm font-bold mb-2"
-                                            htmlFor="end">
-                                            Fecha Final
-                                        </label>
-                                        <input
-                                            className="shadow appearance-none border rounded w-full py-2 px-3 text-neutral-200 leading-tight focus:outline-none focus:shadow-outline"
-                                            id="end"
-                                            type="date"
-                                            placeholder="01-03-2022"
-                                            required
-                                            min={begin}
-                                            onChange={e =>
-                                                setEnd(e.target.value)
                                             }
                                         />
                                     </div>
@@ -128,7 +88,7 @@ export default function AddRoutesModal(props) {
                                         onClick={() => {
                                             addRoute()
                                         }}>
-                                        Crear nueva ruta
+                                        Crear nueva visita
                                     </button>
                                 </div>
                             </div>

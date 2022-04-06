@@ -94,7 +94,7 @@ const Login = () => {
                     </div>
 
                     {/* Remember Me */}
-                    <div className="block mt-4">
+                    {/* <div className="block mt-4">
                         <label
                             htmlFor="remember_me"
                             className="inline-flex items-center">
@@ -109,16 +109,16 @@ const Login = () => {
                                 Recordar contraseña
                             </span>
                         </label>
-                    </div>
+                    </div> */}
 
-                    <div className="flex items-center justify-end mt-4">
-                        <Link href="/forgot-password">
+                    <div className="flex text-center mt-4">
+                        {/* <Link href="/forgot-password">
                             <a className="underline text-sm text-gray-600 hover:text-gray-900">
                                 Olvidaste tu contraseña?
                             </a>
-                        </Link>
+                        </Link> */}
 
-                        <Button className="ml-3" disabled={isLoading}>
+                        <Button className="w-full" disabled={isLoading}>
                             Iniciar sesión
                         </Button>
                     </div>

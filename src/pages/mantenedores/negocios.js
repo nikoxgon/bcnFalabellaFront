@@ -8,18 +8,18 @@ import 'react-tailwind-table/dist/index.css'
 
 import DeleteModal from '@/components/Modals/DeleteModal'
 import EditModal from '@/components/Modals/EditModal'
-import AddCountriesModal from '@/components/Modals/AddCountriesModal'
+import AddNegociosModal from '@/components/Modals/AddNegociosModal'
 
-const Countries = () => {
-    const [countries, setCountries] = useState([])
+const Negocios = () => {
+    const [negocios, setNegocios] = useState([])
     const [columns] = useState(getColumns)
 
-    const loadCountries = async () => {
+    const loadNegocios = async () => {
         const response = await axios.get(
-            'http://localhost:8000/api/v1/countries',
+            'http://localhost:8000/api/v1/negocios',
         )
         if (response.status === 200) {
-            setCountries(response.data)
+            setNegocios(response.data)
         }
 
         if (response.status === 500) {
@@ -32,13 +32,13 @@ const Countries = () => {
             return (
                 <>
                     <EditModal
-                        url={`http://localhost:8000/api/v1/countries/${row.id}`}
-                        handler={loadCountries}
+                        url={`http://localhost:8000/api/v1/negocios/${row.id}`}
+                        handler={loadNegocios}
                     />
                     <DeleteModal
-                        objectName={'País'}
-                        handler={loadCountries}
-                        urlDelete={`http://localhost:8000/api/v1/countries/${row.id}`}
+                        objectName={'Negocio'}
+                        handler={loadNegocios}
+                        urlDelete={`http://localhost:8000/api/v1/negocios/${row.id}`}
                     />
                 </>
             )
@@ -56,7 +56,7 @@ const Countries = () => {
             {
                 // use_in_display: false,
                 field: 'name', //Object destructure
-                use: 'Nombre País',
+                use: 'Nombre Negocio',
             },
             {
                 // use_in_display: false,
@@ -72,7 +72,7 @@ const Countries = () => {
     }
 
     useEffect(() => {
-        loadCountries()
+        loadNegocios()
         // componentWillUnmount
         return () => {}
     }, [])
@@ -80,27 +80,29 @@ const Countries = () => {
     return (
         <AppLayout
             header={
-                <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    Mantenedores - Países
+                <h2 className="font-semibold text-xl text-neutral-300 leading-tight ">
+                    Mantenedores - Negocios
                 </h2>
             }>
             <Head>
-                <title>Falabella - Mantenedores - Países</title>
+                <title>Falabella - Negocios</title>
             </Head>
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div className="bg-neutral-800 overflow-hidden shadow-sm sm:rounded-lg">
                         <div>
-                            <AddCountriesModal
-                                handler={loadCountries}
-                                url={'http://localhost:8000/api/v1/countries'}
+                            <AddNegociosModal
+                                handler={loadNegocios}
+                                url={'http://localhost:8000/api/v1/negocios'}
                             />
                         </div>
                         <div>
                             <Table
                                 columns={columns}
-                                rows={countries}
+                                rows={negocios}
                                 row_render={rowcheck}
+                                export_text="Exportar"
+                                striped={true}
                             />
                         </div>
                     </div>
@@ -110,4 +112,4 @@ const Countries = () => {
     )
 }
 
-export default Countries
+export default Negocios

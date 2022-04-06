@@ -3,4 +3,5 @@ module.exports = {
     images: {
         formats: ['image/avif', 'image/webp'],
     },
+    experimental: { images: { layoutRaw: true } },
 }

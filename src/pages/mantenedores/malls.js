@@ -31,7 +31,7 @@ const Malls = () => {
                     <button className="border p-2">Edit</button>
                     <DisableEnableModal
                         objectName={'Mall'}
-                        status={row.enabled}
+                        status={row.disabled}
                         handler={loadMalls}
                         url={
                             'http://localhost:8000/api/v1/malls/toggle/' +
@@ -49,9 +49,8 @@ const Malls = () => {
                 </>
             )
         }
-
-        if (column.field === 'name') {
-            return <b>{display_value}</b>
+        if (column.field === 'disabled') {
+            return row.disabled ? 'Deshabilitado' : 'Habilitado'
         }
 
         return display_value
@@ -66,12 +65,7 @@ const Malls = () => {
             },
             {
                 // use_in_display: false,
-                field: 'country.name', //Object destructure
-                use: 'País',
-            },
-            {
-                // use_in_display: false,
-                field: 'enabled', //Object destructure
+                field: 'disabled', //Object destructure
                 use: 'Habilitado/Deshabilitado',
             },
 
@@ -98,7 +92,7 @@ const Malls = () => {
                 </h2>
             }>
             <Head>
-                <title>Falabella - Mantendores - Malls</title>
+                <title>Falabella - Mantenedores - Malls</title>
             </Head>
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">

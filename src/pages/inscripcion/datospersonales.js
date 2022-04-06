@@ -20,21 +20,19 @@ const Inscripcion = () => {
         // redirectIfAuthenticated: '/dashboard',
     })
 
-    const [countries, setCountries] = useState([])
+    const [negocios, setNegocios] = useState([])
     // CREAR STATE PARA LOS INPUTS
     const [name, setName] = useState('')
-    const [rut, setRut] = useState('')
     const [email, setEmail] = useState('')
     const [phone, setPhone] = useState('')
-    const [country, setCountry] = useState('')
-    const [pase_movilidad, setPmovilidad] = useState(false)
-    const [grupo_riesgo, setGriesgo] = useState(false)
+    const [negocio, setNegocio] = useState('')
+    const [confirmation, setConfirmation] = useState(false)
     const [errors, setErrors] = useState([])
     const [status, setStatus] = useState(null)
 
     useEffect(() => {
         setEmail(localStorage.getItem('email'))
-        loadCountryData()
+        loadNegocios()
         if (router.query.reset?.length > 0 && errors.length === 0) {
             setStatus(atob(router.query.reset))
         } else {
@@ -42,12 +40,12 @@ const Inscripcion = () => {
         }
     }, [])
 
-    const loadCountryData = async () => {
+    const loadNegocios = async () => {
         const response = await axios.get(
-            'http://localhost:8000/api/v1/countries',
+            'http://localhost:8000/api/v1/negocios',
         )
         if (response.status === 200) {
-            setCountries(response.data)
+            setNegocios(response.data)
         }
 
         if (response.status === 500) {
@@ -57,15 +55,13 @@ const Inscripcion = () => {
 
     const submitForm = async event => {
         event.preventDefault()
-        localStorage.setItem('country', country)
+        localStorage.setItem('negocio', negocio)
         inscripcion({
             name,
-            rut,
             email,
             phone,
-            pase_movilidad,
-            grupo_riesgo,
-            country,
+            confirmation,
+            negocio,
             setErrors,
             setStatus,
         })
@@ -103,20 +99,6 @@ const Inscripcion = () => {
                         />
                     </div>
 
-                    {/* RUT */}
-                    <div className="mt-4">
-                        <Label htmlFor="rut">RUT</Label>
-
-                        <Input
-                            id="rut"
-                            type="text"
-                            value={rut}
-                            className="block mt-1 w-full"
-                            onChange={event => setRut(event.target.value)}
-                            required
-                        />
-                    </div>
-
                     {/* MAIL */}
                     <div className="mt-4">
                         <Label htmlFor="email">Mail</Label>
@@ -132,22 +114,22 @@ const Inscripcion = () => {
                         />
                     </div>
 
-                    {/* PAÍS */}
+                    {/* Negocio */}
                     <div className="mt-4">
-                        <Label htmlFor="country">País</Label>
+                        <Label htmlFor="negocio">Negocio</Label>
 
                         <select
                             className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                            id="country"
+                            id="negocio"
                             required
-                            disabled={countries.length > 0 ? false : true}
-                            onChange={e => setCountry(e.target.value)}>
+                            disabled={negocios.length > 0 ? false : true}
+                            onChange={e => setNegocio(e.target.value)}>
                             <option value="">
-                                {countries.length > 0
-                                    ? 'Seleccione un país'
+                                {negocios.length > 0
+                                    ? 'Seleccione un negocio'
                                     : 'Cargando...'}
                             </option>
-                            {countries.map(item => (
+                            {negocios.map(item => (
                                 <option key={item.id} value={item.id}>
                                     {item.name}
                                 </option>
@@ -158,7 +140,6 @@ const Inscripcion = () => {
                     {/* Celular */}
                     <div className="mt-4">
                         <Label htmlFor="phone">Numero Telefónico</Label>
-
                         <Input
                             id="phone"
                             type="tel"
@@ -178,36 +159,15 @@ const Inscripcion = () => {
                                 id="pase_movilidad"
                                 name="pase_movilidad"
                                 type="checkbox"
-                                value={pase_movilidad}
+                                value={confirmation}
                                 onChange={event =>
-                                    setPmovilidad(Boolean(event.target.value))
+                                    setConfirmation(Boolean(event.target.value))
                                 }
                                 className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                             />
 
                             <span className="ml-2 text-sm text-gray-600">
                                 Pase de movilidad
-                            </span>
-                        </label>
-                    </div>
-                    {/* Grupo de riesgo */}
-                    <div className="block mt-4">
-                        <label
-                            htmlFor="grupo_riesgo"
-                            className="inline-flex items-center">
-                            <input
-                                id="grupo_riesgo"
-                                name="grupo_riesgo"
-                                type="checkbox"
-                                value={grupo_riesgo}
-                                onChange={event =>
-                                    setGriesgo(Boolean(event.target.value))
-                                }
-                                className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            />
-
-                            <span className="ml-2 text-sm text-gray-600">
-                                Grupo de riesgo
                             </span>
                         </label>
                     </div>
