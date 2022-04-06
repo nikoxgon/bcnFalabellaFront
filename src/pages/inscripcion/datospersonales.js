@@ -12,6 +12,9 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import axios from 'axios'
 
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
+
 const Inscripcion = () => {
     const router = useRouter()
 
@@ -86,7 +89,7 @@ const Inscripcion = () => {
                 <form onSubmit={submitForm}>
                     {/* Nombre completo */}
                     <div>
-                        <Label htmlFor="name">Nombre</Label>
+                        <Label htmlFor="name">Nombre completo</Label>
 
                         <Input
                             id="name"
@@ -99,9 +102,24 @@ const Inscripcion = () => {
                         />
                     </div>
 
+                    {/* RUT
+                     <div className="mt-4">
+                        <Label htmlFor="rut">RUT</Label>
+
+                        <Input
+                            id="rut"
+                            type="text"
+                            value={rut}
+                            className="block mt-1 w-full"
+                            onChange={event => setRut(event.target.value)}
+                            required
+                        />
+                    </div>
+                    */}
+
                     {/* MAIL */}
                     <div className="mt-4">
-                        <Label htmlFor="email">Mail</Label>
+                        <Label htmlFor="email">Mail corporativo</Label>
 
                         <Input
                             id="email"
@@ -140,34 +158,94 @@ const Inscripcion = () => {
                     {/* Celular */}
                     <div className="mt-4">
                         <Label htmlFor="phone">Numero Telefónico</Label>
-                        <Input
-                            id="phone"
-                            type="tel"
-                            pattern="[0-9.]+"
+                        <PhoneInput
+                            country={'cl'}
                             value={phone}
-                            className="block mt-1 w-full"
-                            onChange={event => setPhone(event.target.value)}
+                            onChange={value => setPhone(value)}
+                            countryCodeEditable={false}
+                            disableDropdown={true}
+                            masks={{
+                                cl: '.........',
+                            }}
                             required
+                            inputProps={{
+                                name: 'phone',
+                                id: 'phone',
+                                className: 'block mt-1 w-full',
+                            }}
+                            flagsImagePath={
+                                'https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.3.0/flags/4x3/'
+                            }
+                            onlyCountries={['cl']}
+                            preferredCountries={['cl']}
+                            placeholder={'+569'}
+                            isValid={value => {
+                                if (
+                                    !value.match(/^(\+?56|0)[2-9]\d{1}\d{7}$/)
+                                ) {
+                                    return 'Numero invalido: ' + value
+                                } else if (
+                                    value.match(/^(\+?56|0)[2-9]\d{1}\d{7}$/)
+                                ) {
+                                    return false
+                                } else {
+                                    return true
+                                }
+                            }}
                         />
                     </div>
-                    {/* Pase de movilidad */}
                     <div className="block mt-4">
+                        <Label htmlFor="confirmationText">
+                            Confirmo que estoy en condiciones de realizar esta
+                            actividad, ya que no cuento con ninguno de los
+                            siguientes impedimentos
+                            <ul className="list-decimal px-4 py-2">
+                                <li>Pertenecer a un grupo de riesgo </li>
+                                <li>No contar con pase de movilidad</li>
+                                <li>Estar embarazada</li>
+                                <li>Contar con movilidad reducida</li>
+                            </ul>
+                            Le recordamos que esta actividad contempla un nivel
+                            de esfuerzo físico leve, en donde se encuentre de
+                            pie por periodos de hasta 2 horas.
+                        </Label>
                         <label
-                            htmlFor="pase_movilidad"
+                            htmlFor="confirmation1"
                             className="inline-flex items-center">
                             <input
-                                id="pase_movilidad"
-                                name="pase_movilidad"
-                                type="checkbox"
+                                id="confirmation"
+                                name="confirmation"
+                                type="radio"
                                 value={confirmation}
                                 onChange={event =>
                                     setConfirmation(Boolean(event.target.value))
                                 }
-                                className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                className=" border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                             />
 
                             <span className="ml-2 text-sm text-gray-600">
-                                Pase de movilidad
+                                Si, confirmo que puedo participar
+                            </span>
+                        </label>
+                    </div>
+                    {/* Grupo de riesgo */}
+                    <div className="block mt-4">
+                        <label
+                            htmlFor="confirmation"
+                            className="inline-flex items-center">
+                            <input
+                                id="confirmation"
+                                name="confirmation"
+                                type="radio"
+                                value={confirmation}
+                                onChange={event =>
+                                    setConfirmation(Boolean(event.target.value))
+                                }
+                                className=" border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            />
+
+                            <span className="ml-2 text-sm text-gray-600">
+                                No, no puedo participar.
                             </span>
                         </label>
                     </div>
